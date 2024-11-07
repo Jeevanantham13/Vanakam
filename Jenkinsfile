@@ -28,5 +28,15 @@ pipeline {
                 }
             }
         }
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    // Apply Kubernetes Deployment, Service, and HPA
+                    sh 'kubectl apply -f deployment.yaml'
+                    sh 'kubectl apply -f service.yaml'
+                    sh 'kubectl apply -f hpa.yaml'
+                }
+            }
+        }
     }
 }
