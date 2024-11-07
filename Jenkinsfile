@@ -1,17 +1,13 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_IMAGE = 'jeeva2407/myimage'
-        DOCKER_CREDENTIALS_ID = 'dockerhub' // Jenkins Docker Hub credentials ID
-    }
-
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/Jeevanantham13/Vanakam.git'
+                git url: 'https://github.com/Jeevanantham13/Vanakam.git'
             }
         }
+        
         stage('Build Docker Image') {
             steps {
                 script {
@@ -19,20 +15,19 @@ pipeline {
                 }
             }
         }
+        
         stage('Run Docker Container') {
             steps {
-                script {
-                    docker.image('helloworld-image').run()
-                }
+                sh 'docker run -d helloworld-image'
             }
         }
+        
         stage('Push Docker Image to Registry') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS_ID}") {
-                        // Tag the image correctly before pushing
-                        docker.image('helloworld-image').tag("jeeva2407/myimage:latest")
-                        docker.image('jeeva2407/myimage:latest').push()  // Push the tagged image
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                        sh 'docker tag helloworld-image jeeva2407/myimage:latest'
+                        sh 'docker push jeeva2407/myimage:latest'
                     }
                 }
             }
