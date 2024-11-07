@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git url: 'https://github.com/Jeevanantham13/Vanakam.git'
+                git branch: 'main', url: 'https://github.com/Jeevanantham13/Vanakam.git'
             }
         }
         
