@@ -32,8 +32,8 @@ pipeline {
                 script {
                     // Log in to Docker Hub and push the image to your Docker registry
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS_ID}") {
-                        docker.image('helloworld-image').tag("${DOCKER_IMAGE}")
-                        docker.image("${DOCKER_IMAGE}").push()
+                        docker.image('helloworld-image').tag("jeeva2407/myimage:latest")  // Correct tag format
+                        docker.image('jeeva2407/myimage:latest').push()  // Push the tagged image
                     }
                 }
             }
