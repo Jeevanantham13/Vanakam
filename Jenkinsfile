@@ -9,7 +9,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage= docker.build('helloworld-image')+ ":$BUILD_NUMBER"
+                    docker.build('helloworld-image')
                 }
             }
         }
@@ -21,9 +21,9 @@ pipeline {
         stage('Push Docker Image to Registry') {
             steps {
                 script {
-                    docker.withRegistry('', 'dockerhub') {
-                        dockerImage.push("$BUILD_NUMBER")
-                        dockerImage.push('latest')
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
+                        sh 'docker tag helloworld-image jeeva2407/myimage:latest'
+                        sh 'docker push jeeva2407/myimage:latest'
                     }
                 }
             }
