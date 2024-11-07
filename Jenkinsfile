@@ -1,13 +1,11 @@
 pipeline {
     agent any
-
     stages {
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/Jeevanantham13/Vanakam.git'
             }
         }
-        
         stage('Build Docker Image') {
             steps {
                 script {
@@ -15,17 +13,15 @@ pipeline {
                 }
             }
         }
-        
         stage('Run Docker Container') {
             steps {
                 sh 'docker run -d helloworld-image'
             }
         }
-        
         stage('Push Docker Image to Registry') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
                         sh 'docker tag helloworld-image jeeva2407/myimage:latest'
                         sh 'docker push jeeva2407/myimage:latest'
                     }
