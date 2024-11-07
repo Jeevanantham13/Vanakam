@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = 'jeeva2407/myimage'
+        DOCKER_CREDENTIALS_ID = 'dockerhub' // Jenkins Docker Hub credentials ID
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
@@ -19,6 +24,17 @@ pipeline {
             steps {
                 script {
                     docker.image('helloworld-image').run()
+                }
+            }
+        }
+        stage('Push Docker Image to Registry') {
+            steps {
+                script {
+                    // Log in to Docker Hub and push the image to your Docker registry
+                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS_ID}") {
+                        docker.image('helloworld-image').tag("${DOCKER_IMAGE}")
+                        docker.image("${DOCKER_IMAGE}").push()
+                    }
                 }
             }
         }
