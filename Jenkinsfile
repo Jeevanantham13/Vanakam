@@ -9,7 +9,6 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                // Make sure the branch is correct and GitHub credentials are set
                 git branch: 'main', url: 'https://github.com/Jeevanantham13/Vanakam.git'
             }
         }
@@ -30,9 +29,9 @@ pipeline {
         stage('Push Docker Image to Registry') {
             steps {
                 script {
-                    // Log in to Docker Hub and push the image to your Docker registry
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_CREDENTIALS_ID}") {
-                        docker.image('helloworld-image').tag("jeeva2407/myimage:latest")  // Correct tag format
+                        // Tag the image correctly before pushing
+                        docker.image('helloworld-image').tag("jeeva2407/myimage:latest")
                         docker.image('jeeva2407/myimage:latest').push()  // Push the tagged image
                     }
                 }
